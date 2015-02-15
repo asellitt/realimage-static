@@ -1453,8 +1453,12 @@ ul.pricing-list
 				ul.pricing-list>li>div>h2
 				{
 					font-weight:700;
-					margin-top:20px;
 					margin-bottom:0px;
+				}
+
+				ul.pricing-list>li>div>span
+				{
+					margin-top:20px;
 				}
 
 				/**************************************************************/
