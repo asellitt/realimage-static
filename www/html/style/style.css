@@ -933,19 +933,19 @@ div.section-background-2 *
 div.section-background-1
 {
 	margin-top:50px;
-	background-image:url('../_sample/section_background/image_01.jpg');
+	background-image:url('../_sample/section_background/01.jpg');
 }
 
 div.section-background-2
 {
 	margin-top:40px;
-	background-image:url('../_sample/section_background/image_02.jpg');
+	background-image:url('../_sample/section_background/02.jpg');
 }
 
 div.section-background-3
 {
 	margin-top:40px;
-	background-image:url('../_sample/section_background/image_03.jpg');
+	background-image:url('../_sample/section_background/03.jpg');
 }
 
 div.section-background-color
