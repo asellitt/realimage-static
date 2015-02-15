@@ -673,7 +673,7 @@ a:hover
 	ul.pricing-list>li:hover>div,
 	.ui-accordion.template-accordion>li>div.ui-accordion-header.ui-state-hover>h5>a
 	{
-		border-color:#77C268;
+		border-color:#F79120;
 	}
 
 	div.pagination a,
@@ -1356,15 +1356,15 @@ div.home-carousel-box
 
 .qtip-success .qtip-content
 {
-	background:#67CC2A;
-	border-color:#67CC2A;
+	background:#F79120;
+	border-color:#F79120;
 }
 
 .qtip-pricing-list .qtip-content
 {
 	font-weight:bold;
-	background:#77C268;
-	border-color:#77C268;
+	background:#F79120;
+	border-color:#F79120;
 	text-transform:uppercase;
 }
 
