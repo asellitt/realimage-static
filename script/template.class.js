@@ -9,23 +9,23 @@ function Template(options)
 	$pagePrefix='page-';
 	$animationComplete=0;
 };
-	
+
 /******************************************************************************/
 
 Template.prototype.createHomeCarousel=function()
 {
-	$('.home-carousel-box').each(function() 
+	$('.home-carousel-box').each(function()
 	{
 		var box=$(this);
 		var carousel=box.children('.home-carousel:first');
-		$this.preloaderWait(box,function() 
-		{	
+		$this.preloaderWait(box,function()
+		{
 			var height=parseInt(box.find('li>div>img').actual('height'));
-	
-			box.animate({'height':height},{duration:1000,easing:'easeOutQuint',complete:function() 
+
+			box.animate({'height':height},{duration:1000,easing:'easeOutQuint',complete:function()
 			{
 				box.css({'height':'auto'}).removeClass('preloader');
-				
+
 				$this.setHomeCarouselHeight(carousel);
 
 				carousel.carouFredSel(
@@ -39,24 +39,24 @@ Template.prototype.createHomeCarousel=function()
 					circular				:	true,
 					direction				:	'left',
 					responsive				:	true,
-					items					: 
+					items					:
 					{
 						height				:	'auto',
 						visible				:	1,
 						minimum				:	1
 					},
-					pagination				:	
+					pagination				:
 					{
-						anchorBuilder		:	function() 
+						anchorBuilder		:	function()
 						{
 							return($this.anchorBuilder($(this).parent('ul'),2));
 						},
-						container			:	function() 
-						{ 
-							return($(this).parents('.home-carousel-box').find('.pagination')); 
+						container			:	function()
+						{
+							return($(this).parents('.home-carousel-box').find('.pagination'));
 						}
-					},		
-					scroll: 
+					},
+					scroll:
 					{
 						items				:	1,
 						duration			:	800,
@@ -70,7 +70,7 @@ Template.prototype.createHomeCarousel=function()
 					},
 					onCreate				:	function()
 					{
-						$(window).bind('resize',function() 
+						$(window).bind('resize',function()
 						{
 							$this.setHomeCarouselHeight(carousel);
 							carousel.trigger('updateSizes');
@@ -93,7 +93,7 @@ Template.prototype.setHomeCarouselHeight=function(carousel)
 
 	if((imageHeight<windowHeight) || (windowHeight<600))
 		carousel.find('li').height('auto');
-	else carousel.find('li').height(windowHeight);	
+	else carousel.find('li').height(windowHeight);
 }
 
 /******************************************************************************/
@@ -104,29 +104,29 @@ Template.prototype.createGoogleMaps=function(id)
 	{
 		var coordinate=new google.maps.LatLng($options.googleMap.coordinates_lat,$options.googleMap.coordinates_lng);
 
-		var mapOptions= 
+		var mapOptions=
 		{
 			zoom				:	15,
 			center				:	coordinate,
 			scrollwheel			:	false,
 			mapTypeControl		:	false,
 			streetViewControl	:	false,
-			zoomControlOptions	: 
+			zoomControlOptions	:
 			{
 				position		:	google.maps.ControlPosition.RIGHT_CENTER
 			},
-			panControlOptions: 
+			panControlOptions:
 			{
 				position		:	google.maps.ControlPosition.LEFT_CENTER
 			},
 			mapTypeId			:	google.maps.MapTypeId.ROADMAP,
-			styles				: 
+			styles				:
 			[
 				{
-					stylers		: 
+					stylers		:
 					[
-						{ 
-							saturation	:	-100 
+						{
+							saturation	:	-100
 						}
 					]
 				}
@@ -144,7 +144,7 @@ Template.prototype.createGoogleMaps=function(id)
 
 		new google.maps.Marker(markerOptions);
 
-		$(window).resize(function() 
+		$(window).resize(function()
 		{
 			var center=googleMap.getCenter();
 			google.maps.event.trigger(googleMap,'resize');
@@ -163,37 +163,37 @@ Template.prototype.createTwitterUserTimeline=function(selector)
 		{
 			var userExp=/(^|\s)@(\w+)/g;
 			var hashExp=/(^|\s)#(\w+)/g;
-			
+
 			var list=$('<ul>').attr('class','quotation-list');
 			$(data).each(function(index,value)
 			{
 				var text=$('<span>').addClass('quotation-list-text');
 				var author=$('<span>').addClass('quotation-list-author');
 				var datetime=$('<span>').addClass('quotation-list-datetime');
-				
+
 				var quoteUp=$('<span>').addClass('quotation-list-icon-up');
 				var quoteDn=$('<span>').addClass('quotation-list-icon-dn');
-				
+
 				var listElement=$(document.createElement('li'));
-				
+
 				var content='';
-				
+
 				content=linkify(value.text)
 				content=content.replace(userExp,' <a href="http://www.twitter.com/$2">@$2</a>');
 				content=content.replace(hashExp,' <a href="http://www.twitter.com/search?q=#$2&src=hash">#$2</a>');
 				text.html(content);
-				
+
 				content=value.user.screen_name;
 				author.html(content);
-				
+
 				content=$.timeago(value.created_at);
 				datetime.html(content);
-				
+
 				list.append(listElement.append(quoteUp).append(text).append(quoteDn).append(author).append(datetime));
 			});
 
 			$(selector).append(list);
-			
+
 			list.parent().append($('<div>').addClass('pagination').addClass('clear-fix'));
 
 			list.carouFredSel(
@@ -202,20 +202,20 @@ Template.prototype.createTwitterUserTimeline=function(selector)
 				infinite				:	true,
 				circular				:	true,
 				direction				:	'up',
-				items					: 
+				items					:
 				{
 					visible				:	1,
 					minimum				:	1
 				},
-				pagination				:	
+				pagination				:
 				{
-					anchorBuilder		:	function() 
+					anchorBuilder		:	function()
 					{
 						return($this.anchorBuilder(list,1));
 					},
-					container			:	list.parent().find('.pagination') 
-				},		
-				scroll: 
+					container			:	list.parent().find('.pagination')
+				},
+				scroll:
 				{
 					items				:	1,
 					duration			:	750,
@@ -231,11 +231,11 @@ Template.prototype.createTwitterUserTimeline=function(selector)
 					$this.updateCarouselSize(selector+'>.caroufredsel_wrapper>ul');
 					$this.updateWaypoints();
 				}
-			});	
-			
+			});
+
 			list.find('a').attr('target','_blank');
 		}
-	});	
+	});
 };
 
 /******************************************************************************/
@@ -244,26 +244,26 @@ Template.prototype.createMenu=function()
 {
 	var menu=$('#menu');
 	var menuList=$('#menu>ul');
-	
+
 	if(menu.length!=1) return;
 	if(menuList.length!=1) return;
-	
+
 	menuList.superfish(
-	{ 
-		delay		:	400, 
-		animation	:	{opacity:'show',height:'show'}, 
-		speed		:	300,                         
-		cssArrows	:	false                       
-	}); 
-	
-	$(window).bind('resize',function() 
+	{
+		delay		:	400,
+		animation	:	{opacity:'show',height:'show'},
+		speed		:	300,
+		cssArrows	:	false
+	});
+
+	$(window).bind('resize',function()
 	{
 		var menuItem=menuList.children('li.menu-selected');
 		$this.animateMenuHover(menuItem,100);
 	});
-	
+
 	var menuItem=menuList.children('li.menu-selected');
-	$this.animateMenuHover(menuItem,0);	
+	$this.animateMenuHover(menuItem,0);
 };
 
 /******************************************************************************/
@@ -271,14 +271,14 @@ Template.prototype.createMenu=function()
 Template.prototype.anchorBuilder=function(parent,margin)
 {
 	var count=parent.children('li').length;
-	return('<a href="#" style="width:'+((100/count)-margin)+'%;margin-right:'+margin+'%"></a>');	
+	return('<a href="#" style="width:'+((100/count)-margin)+'%;margin-right:'+margin+'%"></a>');
 }
 
 /******************************************************************************/
 
 Template.prototype.createMenuResponsive=function()
 {
-	$('#menu-responsive>select').bind('change',function() 
+	$('#menu-responsive>select').bind('change',function()
 	{
 		window.location=$(this).val();
 	})
@@ -289,28 +289,28 @@ Template.prototype.createMenuResponsive=function()
 Template.prototype.animateMenuHover=function(menuElement,duration)
 {
 	$('#menu>ul>li').removeClass('menu-selected');
-	
+
 	if(menuElement.length!=1)
 	{
 		$('#menu-selected').css({width:0});
 		return;
 	}
-	
+
 	var width=$(menuElement).actual('innerWidth');
-	
+
 	$(menuElement).addClass('menu-selected');
-	
-	$('#menu-selected').stop().animate({left:parseInt($(menuElement).position().left),width:width},{duration:duration,queue:false,complete:function() 
+
+	$('#menu-selected').stop().animate({left:parseInt($(menuElement).position().left),width:width},{duration:duration,queue:false,complete:function()
 	{
-			
-	}});		
+
+	}});
 };
 
 /******************************************************************************/
 
 Template.prototype.createStickyNavigationBar=function()
 {
-	$this.preloaderWait($('body'),function() 
+	$this.preloaderWait($('body'),function()
 	{
 		$('#navigation-bar').waypoint('sticky',
 		{
@@ -318,16 +318,16 @@ Template.prototype.createStickyNavigationBar=function()
 			stuckClass	: 'navigation-bar-sticky'
 		});
 	});
-	
-	$(window).scroll(function() 
+
+	$(window).scroll(function()
 	{
 		var menuResponsive=$('#menu-responsive');
-		
+
 		var bar=$('#navigation-bar');
 		var menuItem=$('#menu>ul>li>a');
-		
+
 		var logo=bar.find('.logo');
-		
+
 		if(menuResponsive.css('display')!='block')
 		{
 			if(bar.hasClass('navigation-bar-sticky'))
@@ -337,9 +337,9 @@ Template.prototype.createStickyNavigationBar=function()
 				menuItem.stop().animate({'padding-top':10,'padding-bottom':10},{duration:250});
 
 				clearTimeout($.data(this,'scrollTimer'));
-				$.data(this,'scrollTimer',setTimeout(function() 
+				$.data(this,'scrollTimer',setTimeout(function()
 				{
-					menuItem.stop().animate({'padding-top':40,'padding-bottom':40},{duration:250,complete:function() 
+					menuItem.stop().animate({'padding-top':40,'padding-bottom':40},{duration:250,complete:function()
 					{
 						logo.css({'display':'block'});
 					}});
@@ -363,46 +363,46 @@ Template.prototype.createStickyNavigationBar=function()
 
 Template.prototype.createNavigation=function()
 {
-	$(window).bind('hashchange',function(e) 
+	$(window).bind('hashchange',function(e)
 	{
 		e.preventDefault();
-		
+
 		var hash=window.location.hash.substring(1);
 		var page=$('.page-list>li#'+$pagePrefix+hash);
-		
+
 		if(page.length==1)
 		{
 			$this.updateWaypoints();
-			
-			$.scrollTo(page,{'duration':1000,'offset':-1*$('#navigation-bar').actual('height')+1,easing:'easeOutQuint','onAfter':function() 
+
+			$.scrollTo(page,{'duration':1000,'offset':-1*$('#navigation-bar').actual('height')+1,easing:'easeOutQuint','onAfter':function()
 			{
 				window.location.hash='#page';
-			}});				
+			}});
 		}
-	});	
+	});
 };
 
 /******************************************************************************/
 
 Template.prototype.preloadPage=function()
 {
-	$this.preloaderWait($('body'),function() 
-	{	
-		var pageClock=window.setTimeout(function() 
+	$this.preloaderWait($('body'),function()
+	{
+		var pageClock=window.setTimeout(function()
 		{
 			if($animationComplete==2)
 			{
-			
+
 				var hash=window.location.hash.substring(1);
 				if($.trim(hash).length!=0)
 					$(window).trigger('hashchange');
-				
+
 				window.clearTimeout(pageClock);
 				return;
 			}
-			
+
 			$this.preloadPage();
-			
+
 		},100);
 	});
 };
@@ -411,11 +411,11 @@ Template.prototype.preloadPage=function()
 
 Template.prototype.createImageOverlay=function()
 {
-	$('.image-overlay-image,.image-overlay-video,.image-overlay-url').each(function() 
+	$('.image-overlay-image,.image-overlay-video,.image-overlay-url').each(function()
 	{
 		$(this).children('a:first').append($('<span>').append('<span>'));
-		
-		$(this).hover(function() 
+
+		$(this).hover(function()
 		{
 			$(this).children('a:first').children('span').css({'left':'-100%'}).stop().animate({'left':'0'},{duration:300});
 		},
@@ -435,7 +435,7 @@ Template.prototype.createImageFancybox=function()
 	helpers.buttons={skipSingle:true};
 
 	$('.image-fancybox-image>a').fancybox(
-	{	
+	{
 		type					:	'image',
 		beforeShow				:	function()
 		{
@@ -444,15 +444,15 @@ Template.prototype.createImageFancybox=function()
 		helpers					:	helpers
 	});
 };
-	
+
 /******************************************************************************/
-	
+
 Template.prototype.createVideoFancybox=function()
-{	
+{
 	var helpers={title:{type:'inside'}};
-	
+
 	helpers.media={};
-	
+
 	$('.image-fancybox-video>a').fancybox(
 	{
 		beforeShow				:	function()
@@ -467,7 +467,7 @@ Template.prototype.createVideoFancybox=function()
 
 Template.prototype.preloaderWait=function(object,callbackFunction)
 {
-	var preloaderClock=window.setTimeout(function() 
+	var preloaderClock=window.setTimeout(function()
 	{
 		if(object.find('.preloader-image').length)
 			$this.preloaderWait(object,callbackFunction);
@@ -483,22 +483,22 @@ Template.prototype.preloaderWait=function(object,callbackFunction)
 
 Template.prototype.createImage=function()
 {
-	$('.preloader-image img').each(function() 
+	$('.preloader-image img').each(function()
 	{
 		$(this).attr('src',$(this).attr('src')+'?i='+$this.getRandom(1,100000));
-		$(this).bind('load',function() 
-		{ 
+		$(this).bind('load',function()
+		{
 			var height=parseInt($(this).actual('height'));
 
-			$(this).parent('.preloader-image').animate({height:height},500,function() 
+			$(this).parent('.preloader-image').animate({height:height},500,function()
 			{
 				$(this).css({'height':'auto','background-image':'none'});
 
-				$(this).children('img').animate({opacity:1},300,function() 
-				{					
+				$(this).children('img').animate({opacity:1},300,function()
+				{
 					$(this).parent().removeClass('preloader-image');
 					$(this).unbind('load');
-				}); 
+				});
 			});
 		});
 	});
@@ -508,18 +508,18 @@ Template.prototype.createImage=function()
 
 Template.prototype.createGallery=function()
 {
-	$('.gallery').each(function() 
+	$('.gallery').each(function()
 	{
 		var gallery=$(this);
-		
-		$this.preloaderWait($(this),function() 
-		{	
+
+		$this.preloaderWait($(this),function()
+		{
 			$this.setGalleryResponsive(gallery);
-			$(window).resize(function() 
+			$(window).resize(function()
 			{
 				$this.setGalleryResponsive(gallery);
 			});
-			
+
 			gallery.children('ul.filter-list').children('li').children('a').bind('click',function(e)
 			{
 				e.preventDefault();
@@ -527,10 +527,10 @@ Template.prototype.createGallery=function()
 			});
 
 			gallery.removeClass('preloader');
-		
+
 			var selected=gallery.find('ul.filter-list>li>a.selected');
 			if(selected.length) $this.filter(selected);
-			
+
 			$this.updateWaypoints();
 		});
 	})
@@ -542,12 +542,12 @@ Template.prototype.setGalleryResponsive=function(gallery)
 {
 	var parent=gallery.parent();
 	var parentWidth=parent.actual('width');
-	
+
 	var marginRight=30;
 	var marginBottom=30;
-	
+
 	var galleryList=gallery.children('ul.gallery-list');
-	
+
 	if(parentWidth>460)
 	{
 		if(galleryList.hasClass('layout-p-100'))
@@ -557,19 +557,19 @@ Template.prototype.setGalleryResponsive=function(gallery)
 		if(galleryList.hasClass('layout-p-20x20x20x20'))
 		{
 			marginRight=10;
-			marginBottom=10;			
+			marginBottom=10;
 		}
-	}	
+	}
 	else marginRight=0;
 
 	if(parentWidth>460) galleryList.find('li').removeClass('responsive-column-2');
 	else galleryList.find('li').addClass('responsive-column-2');
-	
+
 	var galleryListWidth=parentWidth+marginRight;
-	
+
 	galleryList.find('li>div').css({'margin-right':marginRight,'margin-bottom':marginBottom});
-	galleryList.css('width',galleryListWidth);	
-	
+	galleryList.css('width',galleryListWidth);
+
 	galleryList.isotope(
 	{
 		resizable			:	false,
@@ -595,10 +595,10 @@ Template.prototype.filter=function(object)
 	if(!object.hasClass('filter-0'))
 	{
 		var aClass=object.attr('class').split(' ');
-		for(var i=0;i<aClass.length;i++) 
+		for(var i=0;i<aClass.length;i++)
 		{
-			if(aClass[i].indexOf('filter-')!=-1) filter+=' .'+aClass[i];			
-		}			
+			if(aClass[i].indexOf('filter-')!=-1) filter+=' .'+aClass[i];
+		}
 	}
 
 	object.parents('div.gallery').children('ul.gallery-list').isotope(
@@ -616,7 +616,7 @@ Template.prototype.filter=function(object)
 };
 
 /******************************************************************************/
-	
+
 Template.prototype.getRandom=function(min,max)
 {
 	return((Math.floor(Math.random()*(max-min)))+min);
@@ -626,15 +626,15 @@ Template.prototype.getRandom=function(min,max)
 
 Template.prototype.createNivoSlider=function()
 {
-	$('.nivo-slider').each(function() 
+	$('.nivo-slider').each(function()
 	{
 		var slider=$(this);
-		$this.preloaderWait(slider,function() 
-		{	
+		$this.preloaderWait(slider,function()
+		{
 			slider.removeClass('preloader');
-			
+
 			var imageCount=slider.find('div').length;
-			
+
 			slider.nivoSlider(
 			{
 				directionNav	:	false,
@@ -644,7 +644,7 @@ Template.prototype.createNivoSlider=function()
 
 					pagination.addClass('pagination');
 					pagination.children('a').css({'width':((100/imageCount)-4)+'%','margin-right':'4%'});
-					
+
 					$this.updateWaypoints();
 				}
 			});
@@ -654,31 +654,31 @@ Template.prototype.createNivoSlider=function()
 
 /******************************************************************************/
 
-Template.prototype.createProgressBar=function(object,animate) 
+Template.prototype.createProgressBar=function(object,animate)
 {
 	object=typeof(object)=='undefined' ? $('.progress-bar') : object;
-	
-	object.not('.animation-complete').each(function() 
+
+	object.not('.animation-complete').each(function()
 	{
 		var c=$(this).attr('class').split(' ');
 		var pattern=/value-[0-9]{1,3}/;
-		
+
 		for(var i in c)
 		{
 			if(pattern.test(c[i]))
 			{
 				var t=c[i].split('-');
 				var value=parseInt(t[t.length-1]);
-				
-				if(value>0)	
+
+				if(value>0)
 				{
 					$(this).append('<span>').append('<span>');
-					
+
 					if(animate)
 						$(this).children('span:first').animate({width:value+'%'},{duration:2000});
 					else $(this).children('span:first').css({'width':value+'%'});
 				}
-				
+
 				$(this).addClass('animation-complete');
 			}
 		}
@@ -687,30 +687,79 @@ Template.prototype.createProgressBar=function(object,animate)
 
 /******************************************************************************/
 
-Template.prototype.createCounter=function(object,animate) 
+(function($) {
+	$.fn.countTo = function(options) {
+		// merge the default plugin settings with the custom options
+		options = $.extend({}, $.fn.countTo.defaults, options || {});
+
+		// how many times to update the value, and how much to increment the value on each update
+		var loops = Math.ceil(options.speed / options.refreshInterval),
+			increment = (options.to - options.from) / loops;
+
+		return $(this).each(function() {
+			var _this = this,
+				loopCount = 0,
+				value = options.from,
+				interval = setInterval(updateTimer, options.refreshInterval);
+
+			function updateTimer() {
+				value += increment;
+				loopCount++;
+				$(_this).html(value.toFixed(options.decimals));
+
+				if (typeof(options.onUpdate) == 'function') {
+					options.onUpdate.call(_this, value);
+				}
+
+				if (loopCount >= loops) {
+					clearInterval(interval);
+					value = options.to;
+
+					if (typeof(options.onComplete) == 'function') {
+						options.onComplete.call(_this, value);
+					}
+				}
+			}
+		});
+	};
+
+	$.fn.countTo.defaults = {
+		from: 0,  // the number the element should start at
+		to: 100,  // the number the element should end at
+		speed: 1000,  // how long it should take to count between the target numbers
+		refreshInterval: 100,  // how often the element should be updated
+		decimals: 0,  // the number of decimal places to show
+		onUpdate: null,  // callback method for every time the element is updated,
+		onComplete: null,  // callback method for when the element finishes updating
+	};
+})(jQuery);
+
+/******************************************************************************/
+
+Template.prototype.createCounter=function(object,animate)
 {
 	object=typeof(object)=='undefined' ? $('.counter') : object;
-	
-	object.not('.animation-complete').each(function() 
+
+	object.not('.animation-complete').each(function()
 	{
 		var c=$(this).attr('class').split(' ');
 		var pattern=/value-[0-9]{1,3}/;
-		
+
 		for(var i in c)
 		{
 			if(pattern.test(c[i]))
 			{
 				var t=c[i].split('-');
 				var value=parseInt(t[t.length-1]);
-				
-				if(value>0)	
+
+				if(value>0)
 				{
 					var object=$(this).children('span:first');
 
 					if(animate) window.setTimeout(function() {$this.runCounter(object,value);},0);
 					else object.html(value)
 				}
-				
+
 				$(this).addClass('animation-complete');
 			}
 		}
@@ -722,12 +771,12 @@ Template.prototype.createCounter=function(object,animate)
 Template.prototype.runCounter=function(object,limit)
 {
 	var currentValue=parseInt(object.text());
-	
+
 	if(isNaN(currentValue)) currentValue=0;
 	if(currentValue==limit) return;
-	
+
 	object.text(currentValue+1);
-	
+
 	window.setTimeout(function() {$this.runCounter(object,limit);},20);
 };
 
@@ -741,20 +790,20 @@ Template.prototype.createQuotationCarousel=function()
 		infinite				:	true,
 		circular				:	true,
 		direction				:	'up',
-		items: 
+		items:
 		{
 			visible				:	1,
 			minimum				:	1
 		},
-		pagination				:	
+		pagination				:
 		{
-			anchorBuilder		:	function() 
+			anchorBuilder		:	function()
 			{
 				return($this.anchorBuilder($(this).parent('ul'),4));
 			},
 			container			:	function() {return($(this).parents('.quotation-list-wrapper').find('.pagination'));}
-		},		
-		scroll: 
+		},
+		scroll:
 		{
 			items				:	1,
 			duration			:	750,
@@ -769,7 +818,7 @@ Template.prototype.createQuotationCarousel=function()
 		{
 			$this.updateWaypoints();
 		}
-	});	
+	});
 };
 
 /******************************************************************************/
@@ -799,14 +848,14 @@ Template.prototype.createAccordion=function()
 Template.prototype.createForm=function()
 {
 	/*
-	$('#contact-form').bind('submit',function(e) 
+	$('#contact-form').bind('submit',function(e)
 	{
 		e.preventDefault();
 		submitContactForm();
 	});
 	*/
 	$('form textarea').elastic();
-	$('form label').inFieldLabels();	
+	$('form label').inFieldLabels();
 };
 
 /******************************************************************************/
@@ -814,7 +863,7 @@ Template.prototype.createForm=function()
 Template.prototype.updateCarouselSize=function(selector)
 {
 	selector=selector==null ? '.caroufredsel_wrapper>ul:not(.update-carousel-disable)' : selector;
-	$(selector).each(function() 
+	$(selector).each(function()
 	{
 		$(this).children('li').height('auto');
 
@@ -834,7 +883,7 @@ Template.prototype.updateCarouselSize=function(selector)
 Template.prototype.getMax=function(object,type)
 {
 	var value=0;
-	object.children('li').each(function() 
+	object.children('li').each(function()
 	{
 		var cValue=$(this).actual(type);
 		value=cValue>value ? cValue : value;
@@ -847,52 +896,52 @@ Template.prototype.getMax=function(object,type)
 
 Template.prototype.createCarousel=function()
 {
-	$('.carousel').each(function() 
+	$('.carousel').each(function()
 	{
 		var carousel=$(this);
 		var carouselContent=carousel.children('.carousel-content');
-		
+
 		var carouselList=carouselContent.find('ul:first');
 		var margin=carouselList.hasClass('layout-p-20x20x20x20x20') ? 10 : 30;
-	
+
 		carouselList.children('li').css({'margin-right':margin,'float':'left','clear':'none'});
-		
+
 		var columnCount=$this.getLayoutColumnCount(carouselList);
 		var columnWidth=(($contentWidth+margin)/columnCount);
-		
+
 		$this.setCarouselResponsive(carousel,columnWidth,margin);
-		$(window).bind('resize',function() 
+		$(window).bind('resize',function()
 		{
 			$this.setCarouselResponsive(carousel,columnWidth,margin);
 		});
-	
+
 		carouselList.carouFredSel(
 		{
 			auto					:	false,
 			infinite				:	true,
 			circular				:	true,
 			direction				:	'left',
-			items: 
+			items:
 			{
-				minimum				:	$this.getLayoutColumnCount(carouselList)+1		
-			},	
-			scroll: 
+				minimum				:	$this.getLayoutColumnCount(carouselList)+1
+			},
+			scroll:
 			{
 				items				:	1,
 				duration			:	750,
 				fx					:	'scroll'
 			},
-			pagination				:	
+			pagination				:
 			{
-				anchorBuilder		:	function() 
+				anchorBuilder		:	function()
 				{
 					return($this.anchorBuilder($(this).parent('ul'),4));
 				},
-				container			:	function() 
-				{ 
-					return($(this).parents('.carousel').find('.pagination')); 
+				container			:	function()
+				{
+					return($(this).parents('.carousel').find('.pagination'));
 				}
-			},	
+			},
 			swipe					:
 			{
 				onTouch				:	true,
@@ -903,22 +952,22 @@ Template.prototype.createCarousel=function()
 				$this.setCarouselResponsive(carousel,columnWidth,margin);
 				$this.updateWaypoints();
 			}
-		});		
+		});
 	})
 };
 
 /******************************************************************************/
 
 Template.prototype.setCarouselResponsive=function(carousel,columnWidth,margin)
-{	
+{
 	var parent=$(carousel).parent();
 	var parentWidth=parent.actual('width');
-	
+
 	var carouselContent=$(carousel).children('.carousel-content');
-	
+
 	var list=$(carouselContent).find('ul:first');
 	var listElement=list.children('li');
-	
+
 	if(parentWidth>300)
 	{
 		var columnCount=Math.floor((parentWidth+margin)/(columnWidth));
@@ -927,20 +976,20 @@ Template.prototype.setCarouselResponsive=function(carousel,columnWidth,margin)
 	else columnCount=1;
 
 	if(columnCount==1) columnWidth=parentWidth;
-	
+
 	var carouselWidth=columnWidth*columnCount;
-	
+
 	listElement.css('width',columnWidth-margin);
-	
+
 	carousel.css('width',carouselWidth-margin);
 	carouselContent.css('width',carouselWidth);
-	
+
 	list.trigger('configuration',['width',carouselWidth]);
 	list.trigger('configuration',['items.width',columnWidth]);
 	list.trigger('configuration',['items.visible',columnCount]);
 	list.trigger('configuration',['items.minimum',columnCount+1]);
-	
-	list.trigger('updateSizes');	
+
+	list.trigger('updateSizes');
 };
 
 /******************************************************************************/
@@ -951,10 +1000,10 @@ Template.prototype.getLayoutColumnCount=function(object)
 	if(object.hasClass('layout-p-33x33x33')) return(3);
 	if(object.hasClass('layout-p-25x25x25x25')) return(4);
 	if(object.hasClass('layout-p-20x20x20x20x20')) return(5);
-	
+
 	if(object.hasClass('layout-p-33x66')) return(2);
 	if(object.hasClass('layout-p-66x33')) return(2);
-	
+
 	return(1);
 };
 
@@ -993,16 +1042,16 @@ Template.prototype.completeAnimation=function(object)
 Template.prototype.createWaypoints=function()
 {
 	/**************************************************************************/
-	
+
 	if($options.animation.enable!=1)
 	{
 		$this.createCounter(undefined,false);
 		$this.createProgressBar(undefined,false);
 		return;
 	}
-	
+
 	/**************************************************************************/
-	
+
 	$('.page-list>li').waypoint(function(direction)
 	{
 		if(direction=='down') $this.animateToCurrentMenuItem($(this));
@@ -1021,9 +1070,9 @@ Template.prototype.createWaypoints=function()
 	{
 		offset	:	'50%'
 	});
-	
+
 	/**************************************************************************/
-	
+
 	$('.progress-bar').waypoint(function()
 	{
 		$this.createProgressBar($(this),true);
@@ -1031,17 +1080,22 @@ Template.prototype.createWaypoints=function()
 	{
 		offset	:	'90%'
 	});
-	
+
 	/**************************************************************************/
-	
+
 	$('.counter').waypoint(function()
 	{
-		$this.createCounter($(this),true);
+		$(this).countTo({
+			from: 50,
+			to: $(this).text(),
+			speed: 3000,
+			refreshInterval: 50
+		});
 	},
 	{
 		offset	:	'90%'
 	});
-	
+
 	/**************************************************************************/
 
 	$('.feature-list>li>span.icon').waypoint(function()
@@ -1063,7 +1117,7 @@ Template.prototype.createWaypoints=function()
 	{
 		offset	:	'110%'
 	});
-	
+
 	/**************************************************************************/
 
 	$('.post-list.post-list-1>li').waypoint(function()
@@ -1085,7 +1139,7 @@ Template.prototype.createWaypoints=function()
 	{
 		offset	:	'120%'
 	});
-	
+
 	/**************************************************************************/
 
 	$('.animate-layout.layout-p-50x50').waypoint(function()
@@ -1094,7 +1148,7 @@ Template.prototype.createWaypoints=function()
 		{
 			var columnLeft=$(this).children('.column-left');
 			var columnRight=$(this).children('.column-right');
-			
+
 			columnLeft.css({opacity:1}).effect('slide',{duration:500});
 			columnRight.css({opacity:1}).effect('slide',{duration:500,direction:'right'});
 
@@ -1110,7 +1164,7 @@ Template.prototype.createWaypoints=function()
 		{
 			$(this).children('.column-left').css({opacity:0});
 			$(this).children('.column-right').css({opacity:0});
-			
+
 		}
 	},
 	{
@@ -1126,20 +1180,20 @@ Template.prototype.createPricingList=function()
 {
 	$('ul.pricing-list>li>div').qtip(
 	{
-		style		:	
-		{ 
+		style		:
+		{
 			classes	:	'qtip-pricing-list'
 		},
-		content		: 	
-		{ 
+		content		:
+		{
 			text	:	function() {return($(this).children('.pricing-list-tooltip').html());}
 		},
-		position	: 	
-		{ 
+		position	:
+		{
 			my		:	'bottom center',
 			at		:	'top center'
 		}
-	});		
+	});
 };
 
 /******************************************************************************/
@@ -1147,7 +1201,7 @@ Template.prototype.createPricingList=function()
 Template.prototype.createParallax=function()
 {
 	if($options.parallax.enable!=1) return;
-	
+
 	$('.section-parallax').css({'background-attachment':'fixed'}).parallax('50%',0.5,true);
 };
 
