@@ -3102,3 +3102,18 @@ ul.list-0
 {
 	display:none;
 }
+
+.portfolio-group
+{
+	display: none;
+}
+
+.portfolio-group-first
+{
+	display: list-item;
+}
+
+#fancybox-buttons
+{
+	display: none;
+}
