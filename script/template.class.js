@@ -465,6 +465,23 @@ Template.prototype.createVideoFancybox=function()
 
 /******************************************************************************/
 
+Template.prototype.createIframeFancybox=function()
+{
+	var helpers={title:{type:'inside'}};
+
+	helpers.media={};
+
+	$('.image-fancybox-iframe>a').fancybox(
+	{
+		beforeShow				:	function()
+		{
+			this.title=$(this.element).nextAll('.image-description-fancybox').text();
+		},
+		helpers					:	helpers
+	});
+};
+/******************************************************************************/
+
 Template.prototype.preloaderWait=function(object,callbackFunction)
 {
 	var preloaderClock=window.setTimeout(function()
