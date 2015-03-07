@@ -437,6 +437,10 @@ Template.prototype.createImageFancybox=function()
 	$('.image-fancybox-image>a').fancybox(
 	{
 		type					:	'image',
+		width					:	1000,
+		minWidth			:	1000,
+		height				:	700,
+		minHeight			:	700,
 		beforeShow				:	function()
 		{
 			this.title=$(this.element).nextAll('.image-description-fancybox').text();
@@ -455,6 +459,10 @@ Template.prototype.createVideoFancybox=function()
 
 	$('.image-fancybox-video>a').fancybox(
 	{
+		width					:	1000,
+		minWidth			:	1000,
+		height				:	700,
+		minHeight			:	700,
 		beforeShow				:	function()
 		{
 			this.title=$(this.element).nextAll('.image-description-fancybox').text();
@@ -473,6 +481,10 @@ Template.prototype.createIframeFancybox=function()
 
 	$('.image-fancybox-iframe>a').fancybox(
 	{
+		width					:	1000,
+		minWidth			:	1000,
+		height				:	700,
+		minHeight			:	700,
 		beforeShow				:	function()
 		{
 			this.title=$(this.element).nextAll('.image-description-fancybox').text();
